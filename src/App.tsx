@@ -3,9 +3,12 @@ import logo from "./logo.svg"
 import "./App.css"
 import { Button } from "@material-ui/core"
 
+import NavBar from "./common/navbar"
+
 function App() {
   return (
     <div className="App">
+      <NavBar/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
