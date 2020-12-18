@@ -1,28 +1,16 @@
 import React from "react"
-import logo from "./logo.svg"
-import "./App.css"
-import { Button } from "@material-ui/core"
+import Box from "@material-ui/core/Box"
 
 import NavBar from "./common/navbar"
+import Home from "./pages/home"
 
 function App() {
   return (
     <div className="App">
       <NavBar/>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          <Button variant="contained" color="primary">Press Me!</Button>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Box mx={7.5}>
+        <Home/>
+      </Box>
     </div>
   )
 }

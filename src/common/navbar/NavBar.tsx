@@ -1,5 +1,5 @@
 import React from "react"
-import { makeStyles, withStyles, Theme, createStyles } from "@material-ui/core/styles"
+import { makeStyles, withStyles, createStyles } from "@material-ui/core/styles"
 import AppBar from "@material-ui/core/AppBar"
 import Container from "@material-ui/core/Container"
 import Link from "@material-ui/core/Link"
@@ -78,6 +78,11 @@ export default function NavBar() {
     const handleChange = (event: any, newValue: any) => {
         setTab(newValue)
     }
+    const tabs = [
+        "Home", "How it works", "F.A.Q", "Investors",
+        "About Us", "Investor Relationships", "Contact Us"]
+        .map((label, index) => <StyledTab label={label} {...a11yProps(index)} />)
+        
     return (
         <div className={classes.root}>
             <AppBar position="static" color="transparent" className={classes.navbarContents}>
@@ -92,13 +97,7 @@ export default function NavBar() {
                     </div>
                     <Container maxWidth="md">
                         <StyledTabs value={tab} onChange={handleChange} aria-label="simple tabs example">
-                            <StyledTab label="Home" {...a11yProps(0)} />
-                            <StyledTab label="How it works" {...a11yProps(1)} />
-                            <StyledTab label="F.A.Q" {...a11yProps(2)} />
-                            <StyledTab label="Investors" {...a11yProps(3)} />
-                            <StyledTab label="About Us" {...a11yProps(4)} />
-                            <StyledTab label="Investor Relationships" {...a11yProps(5)} />
-                            <StyledTab label="Contact Us" {...a11yProps(6)} />
+                            {tabs}
                         </StyledTabs>
                     </Container>
                     <ProductRatings/>
