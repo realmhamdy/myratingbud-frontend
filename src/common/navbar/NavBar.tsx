@@ -81,7 +81,7 @@ export default function NavBar() {
     const tabs = [
         "Home", "How it works", "F.A.Q", "Investors",
         "About Us", "Investor Relationships", "Contact Us"]
-        .map((label, index) => <StyledTab label={label} {...a11yProps(index)} />)
+        .map((label, index) => <StyledTab label={label} {...a11yProps(index)} key={index} />)
         
     return (
         <div className={classes.root}>

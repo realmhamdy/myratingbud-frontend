@@ -3,6 +3,7 @@ import Box from "@material-ui/core/Box"
 
 import NavBar from "./common/navbar"
 import Home from "./pages/home"
+import HomePart2 from "./pages/home-part2"
 
 function App() {
   return (
@@ -10,6 +11,9 @@ function App() {
       <NavBar/>
       <Box mx={7.5}>
         <Home/>
+      </Box>
+      <Box mt={20}>
+        <HomePart2 />
       </Box>
     </div>
   )

@@ -3,5 +3,6 @@ export const Palette = {
     CTAGreen: "#26EC81",
     CTAGreenDarker: "#15c767",
     Orange: "#FFB82D",
-    TextSecondary: "#414144"
+    TextSecondary: "#414144",
+    White: "#FFFFFF"
 }

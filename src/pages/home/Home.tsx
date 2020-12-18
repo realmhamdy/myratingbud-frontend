@@ -2,15 +2,14 @@ import React from "react"
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
-import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
 
 import RatingBox from "../../common/rating-box"
-import { Palette } from "../../values"
+import GreenButton from "../../common/green-button"
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
-        background: "no-repeat url(/homepage-bg.png)",
+        background: "no-repeat url(/images/homepage-bg.png)",
         backgroundPosition: "top right",
         minHeight: 725,
         width: "100%"
@@ -30,14 +29,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             borderRadius: 0,
             borderRight: "none",
             borderWidth: 1
-        }
-    },
-    productSearchButton: {
-        height: 56,
-        borderRadius: 0,
-        backgroundColor: Palette.CTAGreen,
-        "&:hover": {
-            backgroundColor: Palette.CTAGreenDarker
         }
     },
     scrollToDiscoverContainer: {
@@ -73,11 +64,11 @@ export default function Home() {
                         color="primary"
                         className={classes.productSearchInput}
                     />
-                    <Button disableElevation color="primary" variant="contained" className={classes.productSearchButton}>Rate Now</Button>
+                    <GreenButton/>
                 </Grid>
             </Grid>
             <div className={classes.scrollToDiscoverContainer}>
-                <img src="/mouse.png" alt="Mouse image"/>
+                <img src="/images/mouse.png" alt="Mouse image"/>
                 <Typography variant="caption">Scroll to discover</Typography>
             </div>
             <RatingBox className={classes.ratingBox} />
