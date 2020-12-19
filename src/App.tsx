@@ -4,6 +4,7 @@ import Box from "@material-ui/core/Box"
 import NavBar from "./common/navbar"
 import Home from "./pages/home"
 import HomePart2 from "./pages/home-part2"
+import HowItWorks from "./pages/how-it-works"
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
       </Box>
       <Box mt={20}>
         <HomePart2 />
+      </Box>
+      <Box mt={20}>
+        <HowItWorks/>
       </Box>
     </div>
   )
