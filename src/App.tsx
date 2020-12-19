@@ -5,6 +5,7 @@ import NavBar from "./common/navbar"
 import Home from "./pages/home"
 import HomePart2 from "./pages/home-part2"
 import HowItWorks from "./pages/how-it-works"
+import Testimonials from "./pages/testimonials"
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
       </Box>
       <Box mt={20}>
         <HowItWorks/>
+      </Box>
+      <Box mt={20}>
+        <Testimonials/>
       </Box>
     </div>
   )
