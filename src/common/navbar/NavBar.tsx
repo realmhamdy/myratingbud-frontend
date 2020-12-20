@@ -8,6 +8,8 @@ import Tabs from "@material-ui/core/Tabs"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 
+import { Link as RouterLink} from "react-router-dom"
+
 import { Palette } from "../../values"
 
 const useStyles = makeStyles(() => ({
@@ -46,7 +48,9 @@ const StyledTabs = withStyles({
 
 interface StyledTabProps {
     label: string;
-  }
+    component: any;
+    to: string;
+}
 
 const StyledTab = withStyles(() =>
   createStyles({
@@ -79,9 +83,15 @@ export default function NavBar() {
         setTab(newValue)
     }
     const tabs = [
-        "Home", "How it works", "F.A.Q", "Investors",
-        "About Us", "Investor Relationships", "Contact Us"]
-        .map((label, index) => <StyledTab label={label} {...a11yProps(index)} key={index} />)
+        {label: "Home", url: "/"},
+        {label: "How it works", url: "/"},
+        {label: "F.A.Q", url: "/"},
+        {label: "Investors", url: "/"},
+        {label: "About Us", url: "/"},
+        {label: "Investor Relationships", url: "/"},
+        {label: "Contact Us", url: "/"}
+    ]
+        .map((tab, index) => <StyledTab label={tab.label} {...a11yProps(index)} key={index} component={RouterLink} to={tab.url} />)
         
     return (
         <div className={classes.root}>
