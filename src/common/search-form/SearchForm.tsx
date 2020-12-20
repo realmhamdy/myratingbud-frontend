@@ -5,17 +5,38 @@ import TextField from "@material-ui/core/TextField"
 
 import GreenButton from "../green-button"
 
-const useStyles = makeStyles(() => ({
-    productSearchInput: {
-        minWidth: 400,
-        background: "white",
-        "& fieldset": {
-            borderRadius: 0,
-            borderRight: "none",
-            borderWidth: 1
+type INPUT_TYPE = "light" | "dark"
+
+const useStyles = function(type: INPUT_TYPE = "light") {
+    let styles: any
+    if (type == "light") {
+        styles = {
+            minWidth: 400,
+            background: "white",
+            "& fieldset": {
+                borderRadius: 0,
+                borderRight: "none",
+                borderWidth: 1
+            },
+        }
+    } else {
+        styles = {
+            minWidth: 400,
+            background: "#19181A",
+            "& fieldset": {
+                borderRadius: 0,
+                borderRight: "none",
+                borderWidth: 1
+            },
+            "& label": {
+                color: "white"
+            }
         }
     }
-}))
+    return makeStyles(() => ({
+        productSearchInput: styles
+    }))()
+}
 
 interface SearchFormProps {
     inputProps?: any,
@@ -23,7 +44,7 @@ interface SearchFormProps {
 }
 
 export default function SearchForm(props: SearchFormProps) {
-    const classes = useStyles()
+    const classes = useStyles(props.inputProps ? props.inputProps.type : "light")
     return (
         <React.Fragment>
             <TextField

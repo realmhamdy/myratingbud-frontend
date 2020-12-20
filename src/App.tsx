@@ -8,6 +8,7 @@ import HowItWorks from "./pages/how-it-works"
 import Testimonials from "./pages/testimonials"
 import Showcase from "./pages/showcase"
 import BottomPlead from "./pages/bottom-plead"
+import Footer from "./common/footer"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Box mt={20}>
         <BottomPlead/>
       </Box>
+      <Footer/>
     </div>
   )
 }
