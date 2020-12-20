@@ -7,6 +7,7 @@ import HomePart2 from "./pages/home-part2"
 import HowItWorks from "./pages/how-it-works"
 import Testimonials from "./pages/testimonials"
 import Showcase from "./pages/showcase"
+import BottomPlead from "./pages/bottom-plead"
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
       </Box>
       <Box mt={20}>
         <Showcase/>
+      </Box>
+      <Box mt={20}>
+        <BottomPlead/>
       </Box>
     </div>
   )

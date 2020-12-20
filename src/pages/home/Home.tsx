@@ -5,7 +5,8 @@ import Typography from "@material-ui/core/Typography"
 import TextField from "@material-ui/core/TextField"
 
 import RatingBox from "../../common/rating-box"
-import GreenButton from "../../common/green-button"
+import SearchForm from "../../common/search-form"
+
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -22,14 +23,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     productSearchRow: {
         marginTop: theme.spacing(10)
-    },
-    productSearchInput: {
-        minWidth: 400,
-        "& fieldset": {
-            borderRadius: 0,
-            borderRight: "none",
-            borderWidth: 1
-        }
     },
     scrollToDiscoverContainer: {
         position: "absolute",
@@ -58,13 +51,7 @@ export default function Home() {
             </Grid>
             <Grid container spacing={1} className={classes.productSearchRow}>
                 <Grid item xs={6}>
-                    <TextField
-                        label="Insert Url to the product to be rated"
-                        variant="outlined"
-                        color="primary"
-                        className={classes.productSearchInput}
-                    />
-                    <GreenButton/>
+                    <SearchForm/>
                 </Grid>
             </Grid>
             <div className={classes.scrollToDiscoverContainer}>

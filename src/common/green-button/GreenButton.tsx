@@ -18,5 +18,5 @@ const useStyles = makeStyles(() => ({
 
 export default function GreenButton(props: any) {
     const classes = useStyles()
-    return <Button disableElevation variant="contained" className={classes.root} {...props}>Rate Now</Button>
+    return <Button disableElevation variant="contained" className={classes.root} {...props}>{props.text || "Rate Now"}</Button>
 }
