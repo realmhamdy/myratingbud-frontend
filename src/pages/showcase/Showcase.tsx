@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography"
 import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 
 import { Palette } from "../../values"
+import GreenButton from "../../common/green-button"
 
 interface ShowcaseItem {
     image: string,
@@ -46,6 +47,11 @@ export default function Showcase() {
                     <Grid container spacing={3}>
                         {showcaseColumns}
                     </Grid>
+                </Container>
+            </Box>
+            <Box mt={4}>
+                <Container style={{textAlign: "center"}}>
+                    <GreenButton text={"SEE MORE"}/>
                 </Container>
             </Box>
         </div>
