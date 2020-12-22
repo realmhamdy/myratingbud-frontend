@@ -35,11 +35,14 @@ import TwitterIcon from "@material-ui/icons/Twitter"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 import FlagIcon from "@material-ui/icons/Flag"
 
+import { useHistory } from "react-router-dom"
+
 import classnames from "classnames"
 
 import { Palette } from "../../values"
 import TextField from "../../common/textfield"
 import { default as CustomButton } from "../../common/button"
+import CompareButtonContainer from "../../common/compare-button-container"
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -100,11 +103,6 @@ const useStyles = makeStyles((theme: Theme) => ({
             marginLeft: theme.spacing(1)
         }
     },
-    plusButtonContainer: {
-        position: "absolute",
-        right: "0",
-        "top": "40%"
-    },
     collapsed: {
         maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
     },
@@ -139,55 +137,6 @@ interface TabPanelProps {
     children?: React.ReactNode;
     index: any;
     value: any;
-}
-
-interface CompareProductsModalProps {
-    opened: boolean;
-    onSuccess: (urls: Array<string>) => void;
-    onCancelled: () => void;
-}
-
-function CompareProductsModal(props: CompareProductsModalProps) {
-    const { opened, onSuccess, onCancelled } = props
-    const [urls, setUrls] = React.useState<Array<string>>([""])
-
-    function handleCancelled() {
-        onCancelled()
-    }
-    function handleUrlChanged(value: string, index: number) {
-        const newUrls = urls.splice(0, urls.length)
-        newUrls[index] = value
-        setUrls(newUrls)
-    }
-    function handleAddProductInput() {
-        setUrls(urls.concat(""))
-    }
-    const productInputs = urls.map((_, index) => (
-        <ListItem key={index}>
-            <TextField onChange={(e) => handleUrlChanged(e.target.value, index)}/>
-        </ListItem>
-    ))
-    return (
-        <Dialog open={opened} onClose={handleCancelled}>
-            <DialogTitle>Compare products</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </DialogContentText>
-                <List>
-                    {productInputs}
-                    <ListItem>
-                        <Button onClick={handleAddProductInput}><AddIcon/>Add new rating input</Button>
-                    </ListItem>
-                </List>
-            </DialogContent>
-            <DialogActions>
-                <CustomButton type="success" text="Compare Products" onClick={() => onSuccess(urls)}/>
-                <CustomButton type="neutral" text="Cancel" onClick={() => handleCancelled()}/>
-            </DialogActions>
-        </Dialog>
-    )
 }
 
 interface ChallengeRatingModalProps {
@@ -448,23 +397,25 @@ interface ProductData {
     totalPrice: number
 }
 
+const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
+const oneLargeImage = ["/images/iphone-large.png"]
+
+export const PRODUCT_DATA = {
+    type: "Phone",
+    name: "IPhone 11 Pro Max",
+    images: manySmallImages,
+    rating: 70,
+    ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
+    condition: "Second Hand",
+    timeLeft: "3d 13h Friday",
+    priceNoDiscount: 1200,
+    totalPrice: 1000
+}
+
 export default function RatingSummary() {
-    const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
-    const oneLargeImage = ["/images/iphone-large.png"]
-    const [productData, setProductData] = React.useState<ProductData>({
-        type: "Phone",
-        name: "IPhone 11 Pro Max",
-        images: manySmallImages,
-        rating: 70,
-        ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
-        condition: "Second Hand",
-        timeLeft: "3d 13h Friday",
-        priceNoDiscount: 1200,
-        totalPrice: 1000
-    })
+    const [productData, setProductData] = React.useState<ProductData>(PRODUCT_DATA)
     const classes = useStyles()
     const theme = useTheme()
-    const [compareProductsDialogOpen, setCompareProductsDialogOpen] = React.useState(false)
     const [layout, setLayout] = React.useState(false)
     function toggleProductImages() {
         if (layout) {
@@ -487,13 +438,9 @@ export default function RatingSummary() {
                     <Link href="#" className={classes.iconLink}><TwitterIcon/></Link>
                 </div>
                 <div style={{clear: "both"}}></div>
-                <div style={{paddingRight: theme.spacing(6), position: "relative"}}>
+                <CompareButtonContainer>
                     <TopLayout productData={productData}/>
-                    <div className={classes.plusButtonContainer}>
-                        <Button variant="contained" style={{minWidth: "inherit", padding: "6px"}} onClick={() => setCompareProductsDialogOpen(true)}><AddIcon/></Button>
-                        <CompareProductsModal opened={compareProductsDialogOpen} onSuccess={() => setCompareProductsDialogOpen(false)} onCancelled={() => setCompareProductsDialogOpen(false)}/>
-                    </div>
-                </div>
+                </CompareButtonContainer>
                 <Divider style={{marginTop: theme.spacing(4)}}/>
                 <Container maxWidth="xl" style={{marginTop: theme.spacing(4)}}>
                     <FAQTabs/>
