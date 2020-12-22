@@ -4,5 +4,6 @@ export const Palette = {
     CTAGreenDarker: "#15c767",
     Orange: "#FFB82D",
     TextSecondary: "#414144",
-    White: "#FFFFFF"
+    White: "#FFFFFF",
+    OutlineGrey: "#E8E8E8"
 }
