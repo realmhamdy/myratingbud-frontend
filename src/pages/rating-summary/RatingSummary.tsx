@@ -19,6 +19,7 @@ import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogActions from "@material-ui/core/DialogActions"
+import Switch from "@material-ui/core/Switch"
 import Tabs from "@material-ui/core/Tabs"
 import Tab from "@material-ui/core/Tab"
 import Tooltip from "@material-ui/core/Tooltip"
@@ -120,6 +121,11 @@ const useStyles = makeStyles((theme: Theme) => ({
         bottom: 0,
         left: "47%",
         transform: "rotate(180deg)"
+    },
+    singleImageLayoutContainer: {
+        "& > div" : {
+            flexGrow: 2
+        }
     }
 }))
 
@@ -317,33 +323,161 @@ function PropertyBox(props: PropertyBoxProps) {
     )
 }
 
+interface PropertyBoxColumnProps {
+    productData: ProductData;
+}
+
+function LeftPropertyBoxColumn(props: PropertyBoxColumnProps) {
+    const { productData } = props
+    return (
+        <React.Fragment>
+            <PropertyBox image="/images/condition.png" title="Condition" data={productData.condition}/>
+            <PropertyBox image="/images/coin.png" title="Price without discount" data={`${productData.priceNoDiscount} $`}/>
+        </React.Fragment>
+    )
+}
+
+function RightPropertyBoxColumn(props: PropertyBoxColumnProps) {
+    const { productData } = props
+    return (
+        <React.Fragment>
+            <PropertyBox image="/images/calendar.png" title="Time left" data={productData.timeLeft}/>
+            <PropertyBox image="/images/dollar.png" title="Total Price" data={`${productData.totalPrice} $`}/>
+        </React.Fragment>
+    )
+}
+
+interface RatingBudReviewBoxProps {
+    productData: ProductData;
+}
+
+function RatingBudReviewBox(props: RatingBudReviewBoxProps) {
+    const classes = useStyles()
+    const { productData } = props
+    const [ratingTooltipOpen, setRatingTooltipOpen] = React.useState(false)
+    const [challengeRatingDialogOpen, setChallengeRatingDialogOpen] = React.useState(false)
+    const openRatingTooltip = function() {
+        setRatingTooltipOpen(true)
+    }
+    const handleRatingTooltipClosed = function() {
+        setRatingTooltipOpen(false)
+    }
+    return (
+        <div className={classes.ratingContainer}>
+            <Typography variant="h5" gutterBottom>My Rating Bud Review
+                <ClickAwayListener onClickAway={handleRatingTooltipClosed}>
+                    <Tooltip
+                        PopperProps={{disablePortal: true}}
+                        onClose={handleRatingTooltipClosed}
+                        open={ratingTooltipOpen}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        placement="right"
+                        title="MyRatingBud makes it easy to compare used products. Our powerful machine learning algorithms consider all the information available in the product page like images,description of the item and the reliability of seller to provide one number. Neutral. Not biased towards the seller or the buyer. Using this MyRatingBud.com you can make better informed decisions, save time and money.">
+                            <IconButton color="inherit" size="small" style={{margin: 0}} onClick={openRatingTooltip}><HelpOutlineIcon/></IconButton>
+                    </Tooltip>
+                </ClickAwayListener>
+            </Typography>
+            <Typography variant="h4" gutterBottom>{productData.rating}/100</Typography>
+            <Typography variant="body1" gutterBottom>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.</Typography>
+            <Button variant="contained" onClick={() => setChallengeRatingDialogOpen(true)}><FlagIcon style={{color: Palette.CTAGreen}}/>&nbsp;Challenge Rating</Button>
+            <ChallengeRatingModal opened={challengeRatingDialogOpen} onSuccess={(urls) => setChallengeRatingDialogOpen(false)} onCancel={() => setChallengeRatingDialogOpen(false)}/>
+        </div>
+    )
+}
+
+interface TopLayoutProps {
+    productData: ProductData;
+}
+
+function TopLayout(props: TopLayoutProps) {
+    const { productData } = props
+    const classes = useStyles()
+    const theme = useTheme()
+    if (productData.images.length == 1) {
+        return (
+            <div>
+            <Grid container>
+                <Grid item xs={6}>
+                    <img style={{width: "auto", height: "auto"}} src={productData.images[0]}/>
+                </Grid>
+                <Grid container item xs={6} className={classes.singleImageLayoutContainer}>
+                    <Grid item xs={12}><RatingBudReviewBox productData={productData}/></Grid>
+                    <Grid container item xs={6}><LeftPropertyBoxColumn productData={productData}/></Grid>
+                    <Grid container item xs={6}><RightPropertyBoxColumn productData={productData}/></Grid>
+                </Grid>
+            </Grid>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <div className={classes.gridListContainer}>
+                    <GridList cellHeight="auto" spacing={4} className={classes.gridList}>
+                        {productData.images.map((img, index) => (
+                            <GridListTile key={index} style={{width: "auto"}}>
+                                <img src={img} alt={productData.name}/>
+                            </GridListTile>
+                        ))}
+                    </GridList>
+                </div>
+                <Grid container style={{marginTop: theme.spacing(4)}}>
+                    <Grid item xs={6}><RatingBudReviewBox productData={productData}/></Grid>
+                    <Grid container item xs={3}>
+                        <LeftPropertyBoxColumn productData={productData}/>
+                    </Grid>
+                    <Grid container item xs={3}>
+                       <RightPropertyBoxColumn productData={productData}/>
+                    </Grid>
+                </Grid>
+            </div>
+        )
+    }
+}
+
+interface ProductData {
+    type: string,
+    name: string,
+    images: Array<string>,
+    rating: number,
+    ratingDescription: string,
+    condition: string,
+    timeLeft: string,
+    priceNoDiscount: number,
+    totalPrice: number
+}
+
 export default function RatingSummary() {
-    const productData = {
+    const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
+    const oneLargeImage = ["/images/iphone-large.png"]
+    const [productData, setProductData] = React.useState<ProductData>({
         type: "Phone",
         name: "IPhone 11 Pro Max",
-        images: ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"],
+        images: manySmallImages,
         rating: 70,
         ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
         condition: "Second Hand",
         timeLeft: "3d 13h Friday",
         priceNoDiscount: 1200,
         totalPrice: 1000
-    }
+    })
     const classes = useStyles()
     const theme = useTheme()
-    const [ratingTooltipOpen, setRatingTooltipOpen] = React.useState(false)
     const [compareProductsDialogOpen, setCompareProductsDialogOpen] = React.useState(false)
-    const [challengeRatingDialogOpen, setChallengeRatingDialogOpen] = React.useState(false)
-    const handleRatingTooltipClosed = function() {
-        setRatingTooltipOpen(false)
-    }
-    const openRatingTooltip = function() {
-        setRatingTooltipOpen(true)
+    const [layout, setLayout] = React.useState(false)
+    function toggleProductImages() {
+        if (layout) {
+            setProductData({...productData, images: manySmallImages})
+        } else {
+            setProductData({...productData, images: oneLargeImage})
+        }
+        setLayout(!layout)
     }
     return (
         <Container maxWidth="xl">
             <Box m={4}>
-                <Typography variant="h6" gutterBottom style={{color: Palette.TextSecondary}}>{productData.type}</Typography>
+                <Typography variant="h6" gutterBottom style={{color: Palette.TextSecondary}}>{productData.type} <Switch checked={layout} onChange={toggleProductImages}/></Typography>
                 <Typography variant="h4" gutterBottom style={{float: "left"}}>{productData.name}</Typography>
                 <div style={{float: "right"}}>
                     <Link href="#" className={classes.iconLink}><LinkIcon/></Link>
@@ -354,48 +488,7 @@ export default function RatingSummary() {
                 </div>
                 <div style={{clear: "both"}}></div>
                 <div style={{paddingRight: theme.spacing(6), position: "relative"}}>
-                    <div>
-                        <div className={classes.gridListContainer}>
-                            <GridList cellHeight="auto" spacing={4} className={classes.gridList}>
-                                {productData.images.map((img, index) => (
-                                    <GridListTile key={index} style={{width: "auto"}}>
-                                        <img src={img} alt={productData.name}/>
-                                    </GridListTile>
-                                ))}
-                            </GridList>
-                        </div>
-                        <Grid container style={{marginTop: theme.spacing(4)}}>
-                            <Grid item xs={6} className={classes.ratingContainer}>
-                                <Typography variant="h5" gutterBottom>My Rating Bud Review
-                                    <ClickAwayListener onClickAway={handleRatingTooltipClosed}>
-                                        <Tooltip
-                                            PopperProps={{disablePortal: true}}
-                                            onClose={handleRatingTooltipClosed}
-                                            open={ratingTooltipOpen}
-                                            disableFocusListener
-                                            disableHoverListener
-                                            disableTouchListener
-                                            placement="right"
-                                            title="MyRatingBud makes it easy to compare used products. Our powerful machine learning algorithms consider all the information available in the product page like images,description of the item and the reliability of seller to provide one number. Neutral. Not biased towards the seller or the buyer. Using this MyRatingBud.com you can make better informed decisions, save time and money.">
-                                                <IconButton color="inherit" size="small" style={{margin: 0}} onClick={openRatingTooltip}><HelpOutlineIcon/></IconButton>
-                                        </Tooltip>
-                                    </ClickAwayListener>
-                                </Typography>
-                                <Typography variant="h4" gutterBottom>{productData.rating}/100</Typography>
-                                <Typography variant="body1" gutterBottom>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.</Typography>
-                                <Button variant="contained" onClick={() => setChallengeRatingDialogOpen(true)}><FlagIcon style={{color: Palette.CTAGreen}}/>&nbsp;Challenge Rating</Button>
-                                <ChallengeRatingModal opened={challengeRatingDialogOpen} onSuccess={(urls) => setChallengeRatingDialogOpen(false)} onCancel={() => setChallengeRatingDialogOpen(false)}/>
-                            </Grid>
-                            <Grid container item xs={3}>
-                                <PropertyBox image="/images/condition.png" title="Condition" data={productData.condition}/>
-                                <PropertyBox image="/images/coin.png" title="Price without discount" data={`${productData.priceNoDiscount} $`}/>
-                            </Grid>
-                            <Grid container item xs={3}>
-                                <PropertyBox image="/images/calendar.png" title="Time left" data={productData.timeLeft}/>
-                                <PropertyBox image="/images/dollar.png" title="Total Price" data={`${productData.totalPrice} $`}/>
-                            </Grid>
-                        </Grid>
-                    </div>
+                    <TopLayout productData={productData}/>
                     <div className={classes.plusButtonContainer}>
                         <Button variant="contained" style={{minWidth: "inherit", padding: "6px"}} onClick={() => setCompareProductsDialogOpen(true)}><AddIcon/></Button>
                         <CompareProductsModal opened={compareProductsDialogOpen} onSuccess={() => setCompareProductsDialogOpen(false)} onCancelled={() => setCompareProductsDialogOpen(false)}/>
