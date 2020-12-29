@@ -9,5 +9,5 @@ test("Renders title", () => {
       <NavBar />
     </MemoryRouter>
   )
-  expect(screen.getByText("MyRatingBud")).toBeInTheDocument()
+  expect(screen.getByText("Home")).toBeInTheDocument()
 })

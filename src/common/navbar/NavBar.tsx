@@ -18,7 +18,8 @@ const useStyles = makeStyles(() => ({
     },
     navbarTitle: {
         marginBottom: 10,
-        display: "inline-block"
+        display: "flex",
+        justifyContent: "center"
     },
     navbarContents: {
         padding: "0px 24px",
@@ -26,6 +27,7 @@ const useStyles = makeStyles(() => ({
     },
     branding: {
         color: Palette.CTAPurple,
+
     },
 }))
 
@@ -98,10 +100,9 @@ export default function NavBar() {
             <AppBar position="static" color="transparent" className={classes.navbarContents}>
                 <Toolbar>
                     <div className={classes.branding}>
-                        <Link component="button" href="/">
-                            <span style={{fontSize: "2em"}}>&#9733;</span>
+                        <Link component={RouterLink} to="/" underline="none">
                             <Typography variant="h6" className={classes.navbarTitle}>
-                                MyRatingBud
+                                &#9733;MyRatingBud
                             </Typography>
                         </Link>
                     </div>
