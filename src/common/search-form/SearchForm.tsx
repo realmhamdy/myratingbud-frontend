@@ -38,13 +38,20 @@ const useStyles = function(type: INPUT_TYPE = "light") {
     }))()
 }
 
-interface SearchFormProps {
+export interface SearchFormProps {
     inputProps?: any,
     btnProps?: any
 }
 
 export default function SearchForm(props: SearchFormProps) {
     const classes = useStyles(props.inputProps ? props.inputProps.type : "light")
+    const [productURL, setProductURL] = React.useState("")
+    function handleURLChanged(event: React.ChangeEvent<HTMLInputElement>) {
+        setProductURL(event.target.value)
+    }
+    function handleRateButtonClicked() {
+        props.btnProps.onClick(productURL)
+    }
     return (
         <React.Fragment>
             <TextField
@@ -52,9 +59,12 @@ export default function SearchForm(props: SearchFormProps) {
                 variant="outlined"
                 color="primary"
                 className={classes.productSearchInput}
+                value={productURL}
+                onChange={handleURLChanged}
+                inputProps={{"data-testid": "product-url-input"}}
                 {...props.inputProps}
             />
-            <GreenButton {...props.btnProps}/>
+            <GreenButton {...props.btnProps} onClick={handleRateButtonClicked}/>
         </React.Fragment>
     )
 }

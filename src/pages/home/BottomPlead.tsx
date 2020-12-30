@@ -6,6 +6,7 @@ import Container from "@material-ui/core/Container"
 import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
 
+import RateProductForm from "../../common/rate-product-form"
 import SearchForm from "../../common/search-form"
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +29,7 @@ export default function BottomPlead() {
                         <Typography variant="h4" gutterBottom  style={{marginTop: "30%"}}>Impress your clients and start with MyRatingBud today</Typography>
                         <Typography variant="body1" gutterBottom>MyRatingBud uses historical market data and all the information available in the product page.</Typography>
                         <Box mt={2}>
-                            <SearchForm btnProps={{style: {backgroundColor: "black", color: "white"}}}/>
+                            <RateProductForm btnProps={{style: {backgroundColor: "black", color: "white"}}}/>
                         </Box>
                     </Grid>
                 </Grid>

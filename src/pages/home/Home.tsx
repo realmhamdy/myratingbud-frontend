@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography"
 
 import { Link as RouterLink } from "react-router-dom"
 
+import RateProductForm from "../../common/rate-product-form"
 import RatingBox from "../../common/rating-box"
 import SearchForm from "../../common/search-form"
 
@@ -60,7 +61,7 @@ export default function Home() {
                     </Grid>
                     <Grid container spacing={1} className={classes.productSearchRow}>
                         <Grid item xs={6}>
-                            <SearchForm btnProps={{component: RouterLink, to: "/rating-summary"}} />
+                            <RateProductForm/>
                         </Grid>
                     </Grid>
                     <div className={classes.scrollToDiscoverContainer}>
