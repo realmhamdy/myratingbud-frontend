@@ -383,7 +383,7 @@ function TopLayout(props: TopLayoutProps) {
     }
 }
 
-interface ProductData {
+export interface ProductData {
     type: string,
     name: string,
     images: Array<string>,

@@ -85,7 +85,8 @@ export default function CompareButtonContainer(props: CompareButtonContainerProp
     const [compareProductsDialogOpen, setCompareProductsDialogOpen] = React.useState(false)
     function handleCompareProductsModalSucceeded(urls: Array<string>) {
         setCompareProductsDialogOpen(false)
-        history.push("/compare")
+        const urlsQuery = urls.reduce((previous, current) => `${previous}&urls=${encodeURIComponent(current)}`, "").slice(1)
+        history.push(`/compare/?${urlsQuery}`)
     }
     return (
         <div style={{paddingRight: theme.spacing(6), position: "relative"}}>

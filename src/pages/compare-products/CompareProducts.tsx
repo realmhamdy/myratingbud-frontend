@@ -18,8 +18,13 @@ import Tooltip from "@material-ui/core/Tooltip"
 import CloseIcon from "@material-ui/icons/Close"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 
+import { useLocation } from "react-router-dom"
+import axios from "axios"
+
+import { makeURL } from "../../utils"
 import { Palette } from "../../values"
 import CompareButtonContainer from "../../common/compare-button-container"
+import { ProductData } from "../rating-summary"
 
 const useStyles = makeStyles((theme: Theme) => ({
     productContainer: {
@@ -47,36 +52,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface ProductBoxProps {
     onClose: () => void;
+    product: ProductData
 }
 
-const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
-const oneLargeImage = ["/images/iphone-large.png"]
-
-export const PRODUCT_DATA = {
-    type: "Phone",
-    name: "IPhone 11 Pro Max",
-    images: manySmallImages,
-    rating: 70,
-    ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
-    condition: "Second Hand",
-    timeLeft: "3d 13h Friday",
-    priceNoDiscount: 1200,
-    totalPrice: 1000
-}
 
 function ProductBox(props: ProductBoxProps) {
     const classes = useStyles()
     const theme = useTheme()
-    const { onClose } = props
-    const productTiles = PRODUCT_DATA.images.map((image, index) => (
+    const { onClose, product } = props
+    const productTiles = product.images.map((image, index) => (
         <GridListTile key={index} style={{width: theme.spacing(10)}}>
-            <img src={image} alt={PRODUCT_DATA.name}/>
+            <img src={image} alt={product.name}/>
         </GridListTile>
     ))
     return (
         <Box my={2}>
             <Paper className={classes.productContainer}>
-                <Typography variant="h5" gutterBottom className={classes.productHeader}>{PRODUCT_DATA.name} <IconButton onClick={onClose}><CloseIcon/></IconButton></Typography>
+                <Typography variant="h5" gutterBottom className={classes.productHeader}>{product.name} <IconButton onClick={onClose}><CloseIcon/></IconButton></Typography>
                 <GridList cellHeight={theme.spacing(10)} spacing={4} className={classes.gridList}>
                     {productTiles}
                 </GridList>
@@ -84,25 +76,25 @@ function ProductBox(props: ProductBoxProps) {
                     <TableBody>
                         <TableRow>
                             <TableCell>Condition</TableCell>
-                            <TableCell><Typography variant="subtitle2">{PRODUCT_DATA.condition}</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle2">{product.condition}</Typography></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Time Left</TableCell>
-                            <TableCell><Typography variant="subtitle2">{PRODUCT_DATA.timeLeft}</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle2">{product.timeLeft}</Typography></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Price Without Discount</TableCell>
-                            <TableCell><Typography variant="subtitle2">$ {PRODUCT_DATA.priceNoDiscount}</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle2">$ {product.priceNoDiscount}</Typography></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Total Price</TableCell>
-                            <TableCell><Typography variant="subtitle2">$ {PRODUCT_DATA.totalPrice}</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle2">$ {product.totalPrice}</Typography></TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
                 <div className={classes.ratingContainer}>
                     <Typography variant="h6">My Rating Bud review</Typography>
-                    <Typography variant="h5">{PRODUCT_DATA.rating} / 100</Typography>
+                    <Typography variant="h5">{product.rating} / 100</Typography>
                 </div>
             </Paper>
         </Box>
@@ -110,15 +102,21 @@ function ProductBox(props: ProductBoxProps) {
 }
 
 export default function CompareProducts() {
-    const [products, setProducts] = React.useState(new Array(6).fill(PRODUCT_DATA))
+    const [products, setProducts] = React.useState<Array<ProductData>>([])
+    const location = useLocation()
     function handleProductBoxClosed(index: number) {
         const newProducts = products.slice()
         newProducts.splice(index, 1)
         setProducts(newProducts)
     }
+    React.useEffect(() => {
+        const productURLs = location.search
+        axios.get(makeURL(`/products/api/compare/${productURLs}`))
+            .then((response) => setProducts(response.data))
+    }, [location.search])
     const productsCompared = products.map((productData, index) => (
         <Grid item xs={4} key={index}>
-            <ProductBox onClose={() => handleProductBoxClosed(index)}/>
+            <ProductBox product={productData} onClose={() => handleProductBoxClosed(index)}/>
         </Grid>
     ))
     return (
