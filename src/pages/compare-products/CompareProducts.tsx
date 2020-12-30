@@ -19,7 +19,6 @@ import CloseIcon from "@material-ui/icons/Close"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 
 import { Palette } from "../../values"
-import { PRODUCT_DATA } from "../rating-summary/RatingSummary"
 import CompareButtonContainer from "../../common/compare-button-container"
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -48,6 +47,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface ProductBoxProps {
     onClose: () => void;
+}
+
+const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
+const oneLargeImage = ["/images/iphone-large.png"]
+
+export const PRODUCT_DATA = {
+    type: "Phone",
+    name: "IPhone 11 Pro Max",
+    images: manySmallImages,
+    rating: 70,
+    ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
+    condition: "Second Hand",
+    timeLeft: "3d 13h Friday",
+    priceNoDiscount: 1200,
+    totalPrice: 1000
 }
 
 function ProductBox(props: ProductBoxProps) {

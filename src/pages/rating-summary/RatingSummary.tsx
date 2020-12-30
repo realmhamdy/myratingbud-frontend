@@ -17,15 +17,12 @@ import ListItem from "@material-ui/core/ListItem"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
-import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogActions from "@material-ui/core/DialogActions"
-import Switch from "@material-ui/core/Switch"
 import Tabs from "@material-ui/core/Tabs"
 import Tab from "@material-ui/core/Tab"
 import Tooltip from "@material-ui/core/Tooltip"
 import Typography from "@material-ui/core/Typography"
 
-import AddIcon from "@material-ui/icons/Add"
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircleOutlined"
 import LinkIcon from "@material-ui/icons/Link"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
@@ -35,11 +32,12 @@ import TwitterIcon from "@material-ui/icons/Twitter"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 import FlagIcon from "@material-ui/icons/Flag"
 
-import { useHistory } from "react-router-dom"
-
 import classnames from "classnames"
+import { useLocation } from "react-router-dom"
+import axios from "axios"
 
 import { Palette } from "../../values"
+import { makeURL } from "../../utils"
 import TextField from "../../common/textfield"
 import { default as CustomButton } from "../../common/button"
 import CompareButtonContainer from "../../common/compare-button-container"
@@ -397,55 +395,44 @@ interface ProductData {
     totalPrice: number
 }
 
-const manySmallImages = ["/images/iphone-1.png", "/images/iphone-2.png", "/images/iphone-3.png", "/images/iphone-4.png", "/images/iphone-3.png", "/images/iphone-4.png"]
-const oneLargeImage = ["/images/iphone-large.png"]
-
-export const PRODUCT_DATA = {
-    type: "Phone",
-    name: "IPhone 11 Pro Max",
-    images: manySmallImages,
-    rating: 70,
-    ratingDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
-    condition: "Second Hand",
-    timeLeft: "3d 13h Friday",
-    priceNoDiscount: 1200,
-    totalPrice: 1000
-}
-
 export default function RatingSummary() {
-    const [productData, setProductData] = React.useState<ProductData>(PRODUCT_DATA)
+    const [productData, setProductData] = React.useState<ProductData>()
     const classes = useStyles()
     const theme = useTheme()
-    const [layout, setLayout] = React.useState(false)
-    function toggleProductImages() {
-        if (layout) {
-            setProductData({...productData, images: manySmallImages})
-        } else {
-            setProductData({...productData, images: oneLargeImage})
+    const location = useLocation()
+    React.useEffect(() => {
+        const productURL = new URLSearchParams(location.search).get("url")
+        if (productURL !== null) {
+            axios.get(makeURL(`/products/api/rate/?url=${encodeURIComponent(productURL)}`))
+                .then((response) => setProductData(response.data))
+                .catch(console.error)
         }
-        setLayout(!layout)
+    }, [location.search])
+    if (productData) {
+        return (
+            <Container maxWidth="xl">
+                <Box m={4}>
+                    <Typography variant="h6" gutterBottom style={{color: Palette.TextSecondary}}>{productData.type}</Typography>
+                    <Typography variant="h4" gutterBottom style={{float: "left"}}>{productData.name}</Typography>
+                    <div style={{float: "right"}}>
+                        <Link href="#" className={classes.iconLink}><LinkIcon/></Link>
+                        <Link href="#" className={classes.iconLink}><LinkedInIcon/></Link>
+                        <Link href="#" className={classes.iconLink}><InstagramIcon/></Link>
+                        <Link href="#" className={classes.iconLink}><FacebookIcon/></Link>
+                        <Link href="#" className={classes.iconLink}><TwitterIcon/></Link>
+                    </div>
+                    <div style={{clear: "both"}}></div>
+                    <CompareButtonContainer>
+                        <TopLayout productData={productData}/>
+                    </CompareButtonContainer>
+                    <Divider style={{marginTop: theme.spacing(4)}}/>
+                    <Container maxWidth="xl" style={{marginTop: theme.spacing(4)}}>
+                        <FAQTabs/>
+                    </Container>
+                </Box>
+            </Container>
+        )
+    } else {
+        return null
     }
-    return (
-        <Container maxWidth="xl">
-            <Box m={4}>
-                <Typography variant="h6" gutterBottom style={{color: Palette.TextSecondary}}>{productData.type} <Switch checked={layout} onChange={toggleProductImages}/></Typography>
-                <Typography variant="h4" gutterBottom style={{float: "left"}}>{productData.name}</Typography>
-                <div style={{float: "right"}}>
-                    <Link href="#" className={classes.iconLink}><LinkIcon/></Link>
-                    <Link href="#" className={classes.iconLink}><LinkedInIcon/></Link>
-                    <Link href="#" className={classes.iconLink}><InstagramIcon/></Link>
-                    <Link href="#" className={classes.iconLink}><FacebookIcon/></Link>
-                    <Link href="#" className={classes.iconLink}><TwitterIcon/></Link>
-                </div>
-                <div style={{clear: "both"}}></div>
-                <CompareButtonContainer>
-                    <TopLayout productData={productData}/>
-                </CompareButtonContainer>
-                <Divider style={{marginTop: theme.spacing(4)}}/>
-                <Container maxWidth="xl" style={{marginTop: theme.spacing(4)}}>
-                    <FAQTabs/>
-                </Container>
-            </Box>
-        </Container>
-    )
 }
