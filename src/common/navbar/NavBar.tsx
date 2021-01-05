@@ -72,7 +72,7 @@ function a11yProps(index: number) {
 function ProductRatings() {
     return (
         <React.Fragment>
-            <img src="icons/Fire.svg"/>
+            <img src="/icons/Fire.svg"/>
             <Typography>256 products rated today</Typography>
         </React.Fragment>
     )
